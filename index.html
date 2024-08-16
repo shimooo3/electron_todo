@@ -7,6 +7,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
         th,
@@ -29,6 +30,12 @@
         .toggle-btn {
             cursor: pointer;
         }
+
+        .bottom-right {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+        }
     </style>
 </head>
 
@@ -39,16 +46,34 @@
         <input type="text" id="todoDescription" placeholder="Enter description">
         <button type="submit">Add</button>
     </form>
-    <table id="todoTable">
+
+    <h2>Not Done</h2>
+    <table id="notDoneTable">
         <thead>
             <tr>
                 <th>Date</th>
                 <th>Title</th>
-                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tbody id="todoList"></tbody>
+        <tbody id="notDoneList"></tbody>
     </table>
+
+    <h2>Done</h2>
+    <table id="doneTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="doneList"></tbody>
+    </table>
+
+    <h3>Send E-mail</h3>
+    <button id="sendEmailButton" class="bottom-right">Send</button>
+
 
     <script src="renderer.js"></script>
 </body>
