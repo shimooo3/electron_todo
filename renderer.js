@@ -144,8 +144,12 @@ document.getElementById('sendEmailButton').addEventListener('click', async () =>
 
     if (getMsg) {
         const response = await ipcRenderer.invoke('get_msg', todos);
+        const response2 = await ipcRenderer.invoke('send_email', todos);
     } else if (sendManual) {
         const response = await ipcRenderer.invoke('send_manual', todos);
+    } else if (getMsg && sendManual) {
+        const response = await ipcRenderer.invoke('get_msg', todos);
+        const response2 = await ipcRenderer.invoke('send_manual', todos);
     } else {
         const response = await ipcRenderer.invoke('send_email', todos);
     }
