@@ -11,7 +11,7 @@ data = {
 }
 
 # 保存するJSONファイルの名前
-filename = "./src_py/hoge.json"
+filename = "./src_py/hoge3.json"
 
 # カレントディレクトリに保存
 with open(os.path.join(os.getcwd(), filename), 'w') as json_file:

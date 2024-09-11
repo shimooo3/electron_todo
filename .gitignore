@@ -2,3 +2,4 @@
 /.venv
 /src_py/.env
 /nippou
+*.json

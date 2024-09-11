@@ -22,14 +22,16 @@ function renderTodos() {
       <td>${todo.title}</td>
       <td>
         <button onclick="toggleDone(${index})">${todo.done ? 'Undo' : 'Done'}</button>
+      </td>
+      <td>
         <button onclick="toggleDescription(${index})">Description</button>
       </td>
     `;
 
         const descriptionRow = document.createElement('tr');
         descriptionRow.innerHTML = `
-      <td colspan="3" class="description" style="display: none;">
-        <div class="description-text" onclick="makeEditable(this, ${index})">${todo.description}</div>
+      <td colspan="4" class="description" style="display: none;">
+        <div class="description-text" onclick="makeEditable(this, ${index})">${formatDescription(todo.description)}</div>
       </td>
     `;
 
@@ -90,15 +92,19 @@ function toggleDescription(index) {
     }
 }
 
+function formatDescription(description) {
+    return description.replace(/\n/g, '<br>');
+}
+
 function makeEditable(element, index) {
-    // 既に編集モードの場合は何もしない
+    // 既に編集モードの場合何もしない
     if (element.querySelector('textarea')) {
         return;
     }
 
-    const currentText = element.innerText;
+    const currentText = element.innerHTML.replace(/<br>/g, '\n');
     element.innerHTML = `
-    <textarea rows="3" cols="50">${currentText}</textarea>
+    <textarea rows="3" cols="50" style="width: 100%; resize: vertical;">${currentText}</textarea>
     <button onclick="saveDescription(this, ${index})">Save</button>
   `;
 
@@ -111,7 +117,7 @@ function makeEditable(element, index) {
         }
     });
 
-    // クリックイベントの伝播を停止
+    // クリックイベントの伝搬を防ぐ
     element.onclick = (event) => {
         event.stopPropagation();
     };
@@ -119,14 +125,35 @@ function makeEditable(element, index) {
 
 async function saveDescription(button, index) {
     const textarea = button.previousElementSibling || button;
-    const newDescription = textarea.value.trim();
+    const newDescription = textarea.value;
     todos[index].description = newDescription;
     await ipcRenderer.invoke('save-todos', todos);
-    renderTodos();
+
+    const descriptionElement = button.closest('.description');
+    descriptionElement.innerHTML = `
+        <div class="description-text" onclick="makeEditable(this, ${index})">${formatDescription(newDescription)}</div>
+    `;
+
+    // Ensure the description remains visible
+    descriptionElement.style.display = 'table-cell';
 }
+
 document.getElementById('sendEmailButton').addEventListener('click', async () => {
-    const response = await ipcRenderer.invoke('send_email', todos);
+    const getMsg = document.getElementById('getMsgToggle').checked;
+    const sendManual = document.getElementById('sendManualToggle').checked;
+
+    if (getMsg) {
+        const response = await ipcRenderer.invoke('get_msg', todos);
+    } else if (sendManual) {
+        const response = await ipcRenderer.invoke('send_manual', todos);
+    } else {
+        const response = await ipcRenderer.invoke('send_email', todos);
+    }
+
+    //const response = await ipcRenderer.invoke('send_email', todos);
     console.log(response);
 });
+
+
 document.getElementById('todoForm').addEventListener('submit', addTodo);
 loadTodos();

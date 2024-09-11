@@ -62,6 +62,22 @@ ipcMain.handle('send_email', async (event, todos) => {
     return ("success");
 });
 
+ipcMain.handle('get_msg', async (event, todos) => {
+
+    const scriptPath = path.join(__dirname, './src_py/hoge2.py'); // 実行するPythonスクリプト
+    let pyshell = await new PythonShell(scriptPath, options);
+
+    return ("success");
+});
+
+ipcMain.handle('send_manual', async (event, todos) => {
+
+    const scriptPath = path.join(__dirname, './src_py/hoge3.py'); // 実行するPythonスクリプト
+    let pyshell = await new PythonShell(scriptPath, options);
+
+    return ("success");
+});
+
 
 
 console.log('TODOs file path:', TODOS_FILE);
