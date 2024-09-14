@@ -9,7 +9,6 @@ today = datetime.date.today()
 today_str = today.strftime("(%Y/%m/%d)")
 
 load_dotenv("./.env")
-TODOS_JSON_PATH = os.getenv('TODOS_JSON_PATH')
 OFFICE365_ADDRESS = os.getenv('OFFICE365_ADDRESS')
 OFFICE365_PASSWORD = os.getenv('OFFICE365_PASSWORD')
 TO_ADDRESS = os.getenv('TO_ADDRESS')
@@ -20,10 +19,6 @@ USER_NAME = os.getenv('USER_NAME')
 USER_MAJOR = os.getenv('USER_MAJOR')
 JSON_FILE_PATH = os.getenv('JSON_FILE_PATH')
 
-smtp_server = SMTP_SERVER
-smtp_port = SMTP_PORT
-from_address = OFFICE365_ADDRESS
-sender_password = OFFICE365_PASSWORD
 # 実験用
 to_address = OFFICE365_ADDRESS
 
@@ -72,7 +67,7 @@ def make_mail_body(json_data):
     body += "--------------------------\n\n"
     body += "Memo:"
     body += "".join([kanryo_memo, zissityu_memo])
-    body += "\n\n"
+    body += "\n\n\n"
     body += "---\n"
     body += USER_MAJOR + "\n"
     body += BELONGS + " " + USER_NAME + "\n"
@@ -80,14 +75,6 @@ def make_mail_body(json_data):
 
     return body
 
-def get_todos():
-    try:
-        with open(TODOS_JSON_PATH, 'r', encoding='utf-8') as json_file:
-            data = json.load(json_file)
-        return data
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return None
     
 def get_todos(json_path):
     try:
