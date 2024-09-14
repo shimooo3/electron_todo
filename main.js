@@ -69,11 +69,11 @@ ipcMain.handle('save-todos', (event, todos) => {
 // });
 
 ipcMain.handle('send_email', async (event, todos) => {
-    const scriptPath = path.join(__dirname, './src_py/hoge.py');
+    const scriptPath = path.join(__dirname, './src_py/send_mail.py');
     let pyshell = new PythonShell(scriptPath, options);
 
     pyshell.on('message', function (message) {
-        console.log('Python output:', message);
+        console.log('Python output:', encoding = 'utf-8', message);
     });
 
     return new Promise((resolve, reject) => {
