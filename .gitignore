@@ -4,3 +4,4 @@
 /nippou
 *.json
 /logs
+src_py/graph.ipynb
